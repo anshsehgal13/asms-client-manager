@@ -38,13 +38,15 @@ async def signup(payload: UserSignup, db=Depends(get_db)):
     return TokenResponse(access_token=token, user=make_user_response(serialize_doc(user_doc)))
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login")
 async def login(payload: UserLogin, db=Depends(get_db)):
     user = await db.users.find_one({"email": payload.email.lower()})
-    if not user or not verify_password(payload.password, user["password_hash"]):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
-    token = create_access_token({"sub": str(user["_id"])})
-    return TokenResponse(access_token=token, user=make_user_response(serialize_doc(user)))
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    # TEMP BYPASS PASSWORD CHECK
+    return {"message": "User found, password step skipped"}
 
 
 @router.get("/me", response_model=UserResponse)
