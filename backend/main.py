@@ -13,7 +13,6 @@ from routers import auth, clients, activity
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Handle startup and shutdown events"""
     await connect_db()
     yield
     await close_db()
@@ -26,16 +25,18 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS configuration - allow frontend dev server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "https://asms-client-manager-frontend.onrender.com"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://asms-client-manager-frontend.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Register routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(clients.router, prefix="/api/clients", tags=["Clients"])
 app.include_router(activity.router, prefix="/api/activity", tags=["Activity"])
