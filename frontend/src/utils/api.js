@@ -4,7 +4,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://asms-client-manager.onrender.com/api',
+  baseURL: 'https://asms-client-manager.onrender.com',
   headers: { 'Content-Type': 'application/json' },
 })
 
