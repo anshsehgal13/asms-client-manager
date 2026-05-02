@@ -16,6 +16,29 @@ class ClientStatus(str, Enum):
     FOLLOW_UP_LATER = "Follow-up Later"
     CLOSED = "Closed"
 
+class PaymentType(str, Enum):
+    CREDIT = "Credit"
+    CASH = "Cash"
+    NA = "N/A"
+
+class FolderType(str, Enum):
+    PASTING = "Pasting"
+    NON_PASTING = "Non-Pasting"
+    NA = "N/A"
+
+class ReplacementDuration(str, Enum):
+    FOUR_MONTHS = "4 Months"
+    SIX_MONTHS = "6 Months"
+    MORE_THAN_SIX = "More than 6 Months"
+    NA = "N/A"
+
+class ModelType(str, Enum):
+    CROWN = "Crown"
+    OG = "OG"
+    OLED = "OLED"
+    TOOLS = "Tools"
+    BRAND = "Brand"
+    NA = "N/A"
 
 class ActivityType(str, Enum):
     NOTE_ADDED = "note_added"
@@ -32,11 +55,9 @@ class UserSignup(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=6)
 
-
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
-
 
 class UserResponse(BaseModel):
     id: str
@@ -44,7 +65,6 @@ class UserResponse(BaseModel):
     email: str
     is_admin: bool = False
     created_at: datetime
-
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -59,8 +79,11 @@ class ClientCreate(BaseModel):
     phone: str = Field(..., min_length=5, max_length=20)
     notes: Optional[str] = Field(None, max_length=2000)
     status: ClientStatus = ClientStatus.NOT_RESPONDED
-    followup_date: Optional[date] = None  # ISO date string or None
-
+    followup_date: Optional[date] = None
+    payment: PaymentType = PaymentType.NA
+    folder_type: FolderType = FolderType.NA
+    replacement_duration: ReplacementDuration = ReplacementDuration.NA
+    model: ModelType = ModelType.NA
 
 class ClientUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=200)
@@ -68,7 +91,10 @@ class ClientUpdate(BaseModel):
     notes: Optional[str] = Field(None, max_length=2000)
     status: Optional[ClientStatus] = None
     followup_date: Optional[date] = None
-
+    payment: Optional[PaymentType] = None
+    folder_type: Optional[FolderType] = None
+    replacement_duration: Optional[ReplacementDuration] = None
+    model: Optional[ModelType] = None
 
 class ClientResponse(BaseModel):
     id: str
@@ -78,9 +104,12 @@ class ClientResponse(BaseModel):
     notes: Optional[str] = None
     status: ClientStatus
     next_followup_date: Optional[datetime] = None
+    payment: PaymentType = PaymentType.NA
+    folder_type: FolderType = FolderType.NA
+    replacement_duration: ReplacementDuration = ReplacementDuration.NA
+    model: ModelType = ModelType.NA
     created_at: datetime
     updated_at: datetime
-
 
 class ClientListResponse(BaseModel):
     clients: List[ClientResponse]
@@ -96,7 +125,6 @@ class ActivityLogResponse(BaseModel):
     description: str
     metadata: Optional[dict] = None
     created_at: datetime
-
 
 class ActivityListResponse(BaseModel):
     activities: List[ActivityLogResponse]

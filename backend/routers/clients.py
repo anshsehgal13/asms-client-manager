@@ -12,7 +12,8 @@ from core.database import get_db
 from core.security import get_current_user
 from schemas.schemas import (
     ClientCreate, ClientUpdate, ClientResponse,
-    ClientListResponse, DashboardResponse, ClientStatus, ActivityType
+    ClientListResponse, DashboardResponse, ClientStatus, ActivityType,
+    PaymentType, FolderType, ReplacementDuration, ModelType
 )
 from utils.helpers import serialize_doc, serialize_docs, now_utc, start_of_day, end_of_day, date_to_datetime
 
@@ -45,6 +46,10 @@ def format_client(doc: dict) -> ClientResponse:
         notes=d.get("notes"),
         status=d["status"],
         next_followup_date=d.get("next_followup_date"),
+        payment=d.get("payment", "N/A"),
+        folder_type=d.get("folder_type", "N/A"),
+        replacement_duration=d.get("replacement_duration", "N/A"),
+        model=d.get("model", "N/A"),
         created_at=d["created_at"],
         updated_at=d["updated_at"],
     )
@@ -72,6 +77,10 @@ async def create_client(
         "notes": payload.notes,
         "status": payload.status.value if hasattr(payload.status, "value") else str(payload.status),
         "next_followup_date": followup_dt,
+        "payment": payload.payment.value if hasattr(payload.payment, "value") else str(payload.payment),
+        "folder_type": payload.folder_type.value if hasattr(payload.folder_type, "value") else str(payload.folder_type),
+        "replacement_duration": payload.replacement_duration.value if hasattr(payload.replacement_duration, "value") else str(payload.replacement_duration),
+        "model": payload.model.value if hasattr(payload.model, "value") else str(payload.model),
         "created_at": now_utc(),
         "updated_at": now_utc(),
     }
@@ -311,7 +320,15 @@ async def update_client(
                 "Notes were updated",
                 {"notes_preview": payload.notes[:100]}
             ))
-    
+    if payload.payment is not None:
+        update_data["payment"] = payload.payment.value if hasattr(payload.payment, "value") else str(payload.payment)
+    if payload.folder_type is not None:
+        update_data["folder_type"] = payload.folder_type.value if hasattr(payload.folder_type, "value") else str(payload.folder_type)
+    if payload.replacement_duration is not None:
+        update_data["replacement_duration"] = payload.replacement_duration.value if hasattr(payload.replacement_duration, "value") else str(payload.replacement_duration)
+    if payload.model is not None:
+        update_data["model"] = payload.model.value if hasattr(payload.model, "value") else str(payload.model)
+
     await db.clients.update_one({"_id": oid}, {"$set": update_data})
     
     # Write activity logs

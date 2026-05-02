@@ -99,6 +99,10 @@ export default function ClientDetailPage() {
     followup_date: client.next_followup_date
       ? format(parseISO(client.next_followup_date), 'yyyy-MM-dd')
       : null,
+    payment: client.payment || 'N/A',
+    folder_type: client.folder_type || 'N/A',
+    replacement_duration: client.replacement_duration || 'N/A',
+    model: client.model || 'N/A',
   }
 
   return (
@@ -224,6 +228,26 @@ export default function ClientDetailPage() {
               ) : (
                 <p className="text-sm text-slate-400 italic">No notes added</p>
               )}
+            </div>
+
+            {/* ── Extra client details ── */}
+            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-50">
+              <div>
+                <p className="label">Payment</p>
+                <p className="text-sm text-slate-700">{client.payment || 'N/A'}</p>
+              </div>
+              <div>
+                <p className="label">Folder Type</p>
+                <p className="text-sm text-slate-700">{client.folder_type || 'N/A'}</p>
+              </div>
+              <div>
+                <p className="label">Replacement Duration</p>
+                <p className="text-sm text-slate-700">{client.replacement_duration || 'N/A'}</p>
+              </div>
+              <div>
+                <p className="label">Model</p>
+                <p className="text-sm text-slate-700">{client.model || 'N/A'}</p>
+              </div>
             </div>
 
             <div className="pt-2 border-t border-slate-50 grid grid-cols-2 gap-4">

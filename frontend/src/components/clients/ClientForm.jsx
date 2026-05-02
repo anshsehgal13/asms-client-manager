@@ -6,12 +6,22 @@ import { Spinner } from '../ui/index'
 import DatePickerInput from '../ui/DatePickerInput'
 import { ALL_STATUSES } from '../../utils/helpers'
 
+// Options for the 4 new fields
+const PAYMENT_OPTIONS   = ['N/A', 'Credit', 'Cash']
+const FOLDER_OPTIONS    = ['N/A', 'Pasting', 'Non-Pasting']
+const DURATION_OPTIONS  = ['N/A', '4 Months', '6 Months', 'More than 6 Months']
+const MODEL_OPTIONS     = ['N/A', 'Crown', 'OG', 'OLED', 'Tools', 'Brand']
+
 const EMPTY_FORM = {
   name: '',
   phone: '',
   notes: '',
   status: 'Not Responded',
   followup_date: null,
+  payment: 'N/A',
+  folder_type: 'N/A',
+  replacement_duration: 'N/A',
+  model: 'N/A',
 }
 
 export default function ClientForm({ initial = {}, onSubmit, onCancel, submitLabel = 'Save', loading }) {
@@ -41,8 +51,22 @@ export default function ClientForm({ initial = {}, onSubmit, onCancel, submitLab
       notes: form.notes.trim() || null,
       status: form.status,
       followup_date: form.followup_date || null,
+      payment: form.payment,
+      folder_type: form.folder_type,
+      replacement_duration: form.replacement_duration,
+      model: form.model,
     })
   }
+
+  // Reusable select row
+  const SelectField = ({ label, field, options }) => (
+    <div>
+      <label className="label">{label}</label>
+      <select className="input" value={form[field]} onChange={set(field)} disabled={loading}>
+        {options.map((o) => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </div>
+  )
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,15 +99,8 @@ export default function ClientForm({ initial = {}, onSubmit, onCancel, submitLab
       {/* Status */}
       <div>
         <label className="label">Status</label>
-        <select
-          className="input"
-          value={form.status}
-          onChange={set('status')}
-          disabled={loading}
-        >
-          {ALL_STATUSES.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
+        <select className="input" value={form.status} onChange={set('status')} disabled={loading}>
+          {ALL_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
 
@@ -95,6 +112,14 @@ export default function ClientForm({ initial = {}, onSubmit, onCancel, submitLab
           onChange={(date) => setForm((f) => ({ ...f, followup_date: date }))}
           disabled={loading}
         />
+      </div>
+
+      {/* 2-column grid for the 4 new fields */}
+      <div className="grid grid-cols-2 gap-3">
+        <SelectField label="Payment"              field="payment"              options={PAYMENT_OPTIONS} />
+        <SelectField label="Folder Type"          field="folder_type"          options={FOLDER_OPTIONS} />
+        <SelectField label="Replacement Duration" field="replacement_duration" options={DURATION_OPTIONS} />
+        <SelectField label="Model"                field="model"                options={MODEL_OPTIONS} />
       </div>
 
       {/* Notes */}
