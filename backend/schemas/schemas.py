@@ -38,6 +38,7 @@ class ModelType(str, Enum):
     OLED = "OLED"
     TOOLS = "Tools"
     BRAND = "Brand"
+    ACCESSORIES = "Accessories"
     NA = "N/A"
 
 class ActivityType(str, Enum):

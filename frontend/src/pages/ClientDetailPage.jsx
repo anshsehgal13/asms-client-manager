@@ -241,11 +241,11 @@ export default function ClientDetailPage() {
                 <p className="text-sm text-slate-700">{client.folder_type || 'N/A'}</p>
               </div>
               <div>
-                <p className="label">Replacement Duration</p>
+                <p className="label">Replacement Period</p>
                 <p className="text-sm text-slate-700">{client.replacement_duration || 'N/A'}</p>
               </div>
               <div>
-                <p className="label">Model</p>
+                <p className="label">Product Type</p>
                 <p className="text-sm text-slate-700">{client.model || 'N/A'}</p>
               </div>
             </div>

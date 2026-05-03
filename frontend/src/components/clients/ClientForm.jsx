@@ -10,7 +10,7 @@ import { ALL_STATUSES } from '../../utils/helpers'
 const PAYMENT_OPTIONS   = ['N/A', 'Credit', 'Cash']
 const FOLDER_OPTIONS    = ['N/A', 'Pasting', 'Non-Pasting']
 const DURATION_OPTIONS  = ['N/A', '4 Months', '6 Months', 'More than 6 Months']
-const MODEL_OPTIONS     = ['N/A', 'Crown', 'OG', 'OLED', 'Tools', 'Brand']
+const MODEL_OPTIONS     = ['N/A', 'Crown', 'OG', 'OLED', 'Tools', 'Brand', 'Accessories']
 
 const EMPTY_FORM = {
   name: '',
@@ -118,8 +118,8 @@ export default function ClientForm({ initial = {}, onSubmit, onCancel, submitLab
       <div className="grid grid-cols-2 gap-3">
         <SelectField label="Payment"              field="payment"              options={PAYMENT_OPTIONS} />
         <SelectField label="Folder Type"          field="folder_type"          options={FOLDER_OPTIONS} />
-        <SelectField label="Replacement Duration" field="replacement_duration" options={DURATION_OPTIONS} />
-        <SelectField label="Model"                field="model"                options={MODEL_OPTIONS} />
+        <SelectField label="Replacement Period"   field="replacement_duration" options={DURATION_OPTIONS} />
+        <SelectField label="Product Type"         field="model"                options={MODEL_OPTIONS} />
       </div>
 
       {/* Notes */}
